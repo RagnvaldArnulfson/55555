@@ -1,0 +1,287 @@
+class Menu
+{
+  String[] item;
+  String[] credits;
+  String[] options;
+  boolean[] stg;
+  int selected;
+  int show;
+  float alpha;
+  float roll;
+  int image;
+  boolean reseted;
+  
+  Menu()
+  {
+    reseted=false;
+    alpha=0;
+    selected=0;
+    show=0;
+    roll=-585;
+    image=-1;
+    item=new String[5];
+    item[0]="Resume";
+    item[1]="Settings";
+    item[2]="Help";
+    item[3]="Credits";
+    item[4]="Quit";
+    
+    options=new String[5];
+    stg=new boolean[4];
+    options[0]="Smooth background";
+    stg[0]=true;
+    options[1]="Tail Effect";
+    stg[1]=true;
+    options[2]="FullScreen";
+    stg[2]=true;
+    options[3]="Music (setting not implemented yet)";
+    stg[3]=true;
+    options[4]="Reset the game";   
+    
+    credits=new String[6];
+    credits[0]="Did you know that 55555\nis the third version of a concept\nI'm trying to adapt into a game since 2013?";
+    credits[1]="The first game was originally created for LD 27:\nThe Square - 2013";
+    credits[2]="The following year, I made a new version of it:\nSquares - 2014";
+    credits[3]="Unsatisfied with my two previous games,\nI began designing 55555 in April 2015";
+    credits[4]="Now the game is finished, hurray!\nI really enjoyed making it,\n and I hope you enjoyed playing it too!\nI'm satisfied with this current version\nand hopefully there won't be any new one!";
+    credits[5]="A Game made by **\n\nUsing:\nProcessing 2.2.1\n\nFreely inspired by the film:\n'Cube' by Vincenzo Natali\n\nSpecial Thanks go to:\nMy Family\nAenki\nAppelMoiFulbert\nClaire Chazal\nDeep97\nFoxDelPaso\nFoxfiesta\nImanor\nJean-Baptiste P.\nJemmerdeLeKarma\nJulien Lepers\nKitu\nKuminette\nLaura J.\nMonsieur Pétrole\nNapoRen44\nNyddhog\nOujevipo\nPatouroulove\nPauline V.\nPerturbateur B\nPouryfox\nPyrofoux\nRand0matic\nRyan Gosling\nSskdsksd\nSylvia R.\nTfkmaster\nVictor V.\nWHY\nXnqiq\nXurioph\n\n\nAnd to all of you for playing 55555!";
+  }
+  
+  void draw()
+  {
+    background(0);
+    textSize(height/5);    
+    if(show==0)
+    {      
+      fill(255);
+      text("55555", width/2, height/8);
+      selected=(((selected % 5) + 5) % 5);  
+      for(int i=0;i<5;i++)
+      {
+        if(i==selected)
+        {
+          fill(200+cos(alpha)*55);      
+          textSize(height/15);
+          text(">"+item[i]+"<", width/2, height/2 + i*height/12);
+        }
+        else
+        {
+          fill(255);
+          textSize(height/20);
+          text(item[i], width/2, height/2 + i*height/12);
+        }
+      }
+    }
+    else if(show==1) //SETTINGS
+    {
+      textSize(height/20);
+      selected=(((selected % 6) + 6) % 6);  
+      fill(255);
+      for(int i=0;i<6;i++)
+      {
+        fill(255);
+        if(i!=5)
+          text(options[i], width/2, (1+i*2)*height/14);
+        if(i==selected)
+          fill(180+cos(alpha)*75);
+        if(i==5)
+          text("Save Changes",width/2, 6*height/7);
+        else if(i==4&&!reseted)
+          text(">I want to lose all my progress<",width/2, (1.7+i*2)*height/14);
+        else if(i==4&&reseted)
+          text("<Reseted>",width/2, (1.7+i*2)*height/14);
+        else
+        {      
+          if(stg[i])
+            text(">Enable<",width/2, (1.7+i*2)*height/14);
+          else
+            text(">Disable<",width/2, (1.7+i*2)*height/14);
+        }        
+      }      
+    }
+    else if(show==2)
+    {
+      fill(255);
+      textSize(height/15); 
+      text("You have to escape this maze.\nProtip : 5 is the key...", width/2, height/3);
+      fill(200+cos(alpha)*55);                
+      textSize(height/15); 
+      text(">Alright<", width/2, 2*height/3);
+    }
+    else
+    {
+      if(roll>0)
+      {
+        textSize(112);
+        text("55555", width/2, height-roll);
+        fill(255);
+        if(roll>2000+(height/2)+255) //-----------------------------
+        {
+          fill(0);
+          tint(255, roll-(2000+(height/2)+255)); //--------------------
+          image(dedi, width/2, height/2);
+        }
+        if(roll>2000+(height/2)) //------------------------------------
+        {
+          fill(2000+(height/2)+255-roll);   //------------------------------ 
+        }
+        textSize(26); 
+        text(credits[5], width/2, height+200-roll);
+      }
+      else
+      {
+        textSize(height/23);
+        if(roll<-254&&roll>-511)
+        {
+          tint(255, 510+roll);
+          fill(510+roll);
+        }
+        else if(roll>-511)
+        {
+          tint(255, -roll);
+          fill(-roll);
+          if((-roll)%255==0&&image!=3)
+          {
+            image++;
+            roll=-525;
+          } 
+        }
+        else
+        {
+          tint(255,0);
+          fill(0); 
+        }
+        if(image==-1)
+        {
+          textAlign(CENTER, CENTER);
+          text(credits[0], width/2,height/2);
+        }
+        else if(image==0)
+        {
+          if(height/1.5<600)
+          {
+            image(thesquare, width/2, (height/2)-(height/23),(height/1.5)*3/2,height/1.5);
+            text(credits[1], width/2, (height/55)-(height/23)+5*height/6);
+          }
+          else
+          {
+            image(thesquare, width/2, (height/2)-(height/23));
+            text(credits[1], width/2, (height/55)-(height/23)+300+height/2);
+          }          
+        }
+        else if(image==1)
+        {
+          if(height/1.5<600)
+          {
+            image(squares, width/2, (height/2)-(height/23),(height/1.5)*3/2,height/1.5);
+            text(credits[2], width/2, (height/55)-(height/23)+5*height/6);
+          }
+          else
+          {
+            image(squares, width/2, (height/2)-(height/23));
+            text(credits[2], width/2, (height/55)-(height/23)+300+height/2);
+          }
+        }
+        else if(image==2)
+        {
+          if(height/1.5<600)
+          {
+            image(five, width/2, (height/2)-(height/23),(height/1.5)*3/2,height/1.5);
+            text(credits[3], width/2, (height/55)-(height/23)+5*height/6);
+          }
+          else
+          {
+            image(five, width/2, (height/2)-(height/23));
+            text(credits[3], width/2, (height/55)-(height/23)+300+height/2);
+          }
+        }
+        else if(image==3)
+        {
+          textAlign(CENTER, CENTER);
+          text(credits[4], width/2,height/2); 
+        }         
+      }
+      if(roll<0&&image>-1)
+        roll+=0.5;
+      else if(roll<2000+(height/2)+510) //------------------------------
+        roll++;
+      if(keyPressed&&roll<2000+(height/2)+506&&roll>1)//-------------------------------------
+        roll+=4;
+    }
+    alpha=(alpha+PI/25)%(2*PI);
+  }
+  
+  void trigger()
+  {    
+    if(!pause)
+      ost.maze.mute();
+    else
+      ost.maze.unmute();
+    pause=!pause;
+    reseted = false;
+  }
+  
+  void execute()
+  {    
+    if(show!=0)
+    {
+      selected=0;
+      if(show==3)
+      {
+        ost.credits.pause();
+        ost.credits.rewind();
+      }
+      selected=show;
+      roll=-585;
+      show=0;
+      image=-1;     
+    }
+    else if(selected==0)
+      trigger();
+    else if(selected==1)
+      show=1;
+    else if(selected==2)
+      show=2;
+    else if(selected==3)
+    {
+      show=3;
+      ost.credits.play();
+    }
+    else if(selected==4)
+    {
+      minim.stop(); 
+      exit();
+    }
+  }
+  
+  void resetGame()
+  {
+    reseted = true;
+    gameFinished = false;
+    mainBG.alpha=0;
+    laghal.x=0;
+    laghal.y=0;
+    laghal.vx=0;
+    laghal.vy=0;
+    laghal.max = currentRoom.size/8;  
+    for(int i=0;i<15;i++)
+    {
+      laghal.old_x[i]=0;
+      laghal.old_y[i]=0;
+      laghal.old_s[i]=height/20; 
+    }
+    gl.unglitch=0;
+    //gl.krr = 30;
+    gl.NGRoom=4;
+    for(int i=0;i<4;i++)
+      gl.room[i]=false;
+    currentRoom.alpha=0;
+    currentRoom.ground=1;
+    currentRoom.region=0;
+    currentRoom.id=0;
+    currentRoom.groundColor=2;
+    currentRoom.glitch = false;
+    ost.mazeSet = false;
+    ost.fixedSet = false;
+  }
+}
